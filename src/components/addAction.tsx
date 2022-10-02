@@ -4,11 +4,11 @@ import { FC } from 'react'
 type Iprops = {
   one: {
     title: string
-    click: () => void
+    click?: () => void
   }
   two: {
     title: string
-    click: () => void
+    click?: () => void
   }
 }
 const AddAction: FC<Iprops> = props => {
@@ -17,9 +17,7 @@ const AddAction: FC<Iprops> = props => {
       <Button
         icon={<PlusSquareOutlined />}
         style={{ background: 'orange', color: 'white', borderRadius: '8px', marginRight: '20px' }}
-        onClick={() => {
-          props.one.click()
-        }}
+        onClick={props.one.click}
       >
         {props.one.title}
       </Button>

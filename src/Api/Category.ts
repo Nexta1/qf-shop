@@ -1,23 +1,25 @@
 import { http } from '@/utils/axios'
-
-export let addCategory = (categoryName: string, categoryImgurl: string) =>
+interface IgetCategory {
+  data: Icategory[]
+}
+export let addCategory = <T>(data: T) =>
   http.request<{}>({
     url: '/category/addCategory',
     method: 'post',
-    data: { categoryName, categoryImgurl },
+    data,
   })
 export let delCategory = (category_id: string) =>
   http.request<{}>({
     url: '/category/delCategory',
     params: { category_id },
   })
-export let updateCategory = (categoryName: string, category_id: string) =>
+export let updateCategory = <T>(data: T) =>
   http.request<{}>({
     url: '/category/updateCategory',
     method: 'post',
-    data: { categoryName, category_id },
+    data,
   })
 export let getCategory = () =>
-  http.request<{}>({
+  http.request<IgetCategory>({
     url: '/category/getCategory',
   })

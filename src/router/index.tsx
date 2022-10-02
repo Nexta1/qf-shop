@@ -24,14 +24,9 @@ export interface Iroutes extends RouteObject {
 }
 const routes: Iroutes[] = [
   {
-    path: '*',
-    element: <Page404 />,
-  },
-  {
     path: '/login',
     element: <Login></Login>,
   },
-
   {
     path: '/',
     element: <ContentBase />,
@@ -115,6 +110,10 @@ const routes: Iroutes[] = [
         ],
       },
     ],
+  },
+  {
+    path: '*',
+    element: <Page404 />,
   },
 ]
 export default routes

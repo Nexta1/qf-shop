@@ -1,18 +1,5 @@
-import { ReactNode } from 'react'
 import { http } from '@/utils/axios'
-export interface Iproduct {
-  category_id: string
-  description: string
-  imageUrl: string
-  inventory: number
-  price: number
-  productName: string
-  product_id: string
-  updateTime: null
-  updator: null
-  _id: string
-  image: ReactNode
-}
+
 interface IgetProduct {
   data: Partial<Iproduct>[]
   total: number

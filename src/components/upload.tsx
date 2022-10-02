@@ -1,10 +1,16 @@
 import { Upload } from 'antd'
 import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface'
-import React, { useState } from 'react'
-
-const App: React.FC = () => {
+import React, { useEffect, useState } from 'react'
+type Iprops = {
+  url?: string
+}
+const App: React.FC<Iprops> = ({ url }) => {
   const [fileList, setFileList] = useState<UploadFile[]>([])
-  const onChange: UploadProps['onChange'] = ({ fileList: newFileList, event }) => {
+  useEffect(() => {
+    if (url) setFileList([{ uid: '-1', name: 'image.png', url }])
+  }, [url])
+  const onChange: UploadProps['onChange'] = ({ fileList: newFileList, event, file }) => {
+    console.log(event)
     setFileList(newFileList)
   }
   const onPreview = async (file: UploadFile) => {
