@@ -4,7 +4,7 @@ type IaddProduct = {
   price: number
   description: string
   inventory: number
-  imageUrl: string
+  imageUrl: any
 }
 interface Iproduct {
   category_id: string

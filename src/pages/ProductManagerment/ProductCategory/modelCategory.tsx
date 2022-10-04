@@ -1,18 +1,20 @@
 import { Form, Input, Modal } from 'antd'
-import React, { useEffect } from 'react'
-import UploadImg from '@/components/upload'
+import React, { useEffect, useMemo } from 'react'
+import UpLoad from '@/components/upLoad'
 import { IaddCategory } from '.'
 export type IForm = {
   open: boolean
   onCreate: (values: IaddCategory, id?: string) => void
   onCancel: () => void
   title: string
-  edit?: any
+  edit?: Icategory
 }
 
 const CollectionCreateForm = ({ open, onCancel, onCreate, title, edit }: IForm) => {
   const [form] = Form.useForm()
-  let data = edit
+  let data = useMemo(() => {
+    return edit
+  }, [edit])
   useEffect(() => {
     if (data) {
       form.setFieldsValue(data)
@@ -32,6 +34,7 @@ const CollectionCreateForm = ({ open, onCancel, onCreate, title, edit }: IForm) 
         form
           .validateFields()
           .then(values => {
+            console.log(values)
             form.resetFields()
             onCreate(values)
           })
@@ -42,7 +45,7 @@ const CollectionCreateForm = ({ open, onCancel, onCreate, title, edit }: IForm) 
     >
       <Form layout="vertical" name="form_in_modal" form={form}>
         <Form.Item name="categoryImgurl" label="商品图片">
-          <UploadImg url={edit?.categoryImgurl} />
+          <UpLoad />
         </Form.Item>
         <Form.Item name="categoryName" label="商品名称" rules={[{ required: true }]}>
           <Input type="text" />

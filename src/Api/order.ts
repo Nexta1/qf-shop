@@ -1,4 +1,7 @@
 import { http } from '@/utils/axios'
+type IgetOrder = {
+  data: Iorder[]
+}
 export let pre_order = <T>(data: T) =>
   http.request<{}>({
     url: '/pay/pre_order',
@@ -12,7 +15,7 @@ export let order_status = (order_id: string) =>
   })
 //订单详情
 export let get_order = (order_id?: string) =>
-  http.request<{}>({
+  http.request<IgetOrder>({
     url: '/order/get_order',
     method: 'post',
     data: { order_id },

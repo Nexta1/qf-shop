@@ -1,22 +1,16 @@
-import { Divider, Popconfirm, Table } from 'antd'
+import { Badge, Button, message, Modal, Popconfirm, Table } from 'antd'
 import React, { FC, ReactNode, useEffect, useState } from 'react'
 import AddAction from '@/components/addAction'
 import * as api from '@/Api/product'
 import { Image } from 'antd'
 import CollectionCreateForm from './CollectionCreateForm'
 import { createFromIconfontCN } from '@ant-design/icons'
+import Cart from './Cart'
+import * as cartApi from '@/Api/cart'
 
 export const MyIcon = createFromIconfontCN({
-  scriptUrl: '//at.alicdn.com/t/c/font_3684025_yex2wmaqs4c.js', // 在 iconfont.cn 上生成
+  scriptUrl: '//at.alicdn.com/t/c/font_3684025_mq5c6td093g.js', // 在 iconfont.cn 上生成
 })
-const rowSelection = {
-  onChange: (selectedRowKeys: any, selectedRows: any) => {
-    console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows)
-  },
-  // getCheckboxProps: (record: { name: string }) => ({
-  //   name: record.name,
-  // }),
-}
 
 export type Icontent = Iproduct & {
   key: string
@@ -26,6 +20,17 @@ const ProductList: FC = () => {
   const [Product, setProduct] = useState<Partial<Icontent>[]>()
   const [open, setOpen] = useState(false)
   const [edit, setEdit] = useState<Partial<Icontent>>()
+  const [CartOpen, setCartOpen] = useState(false)
+  const [delProductID, setDelProductID] = useState<Partial<Icontent>[]>([])
+
+  //选中数据
+  const rowSelection = {
+    onChange: (_: any, selectedRows: Partial<Icontent>[]) => {
+      setDelProductID(selectedRows)
+    },
+  }
+
+  //列表数据
   const columns = [
     {
       title: '编号',
@@ -48,6 +53,10 @@ const ProductList: FC = () => {
       dataIndex: 'price',
     },
     {
+      title: '库存',
+      dataIndex: 'inventory',
+    },
+    {
       title: '描述',
       dataIndex: 'description',
     },
@@ -61,14 +70,27 @@ const ProductList: FC = () => {
             <Popconfirm title="确定删除吗?" onConfirm={() => delProduct(record.product_id!)}>
               <MyIcon type="icon-shanchu" />
             </Popconfirm>
+
+            <MyIcon type="icon-gouwuche2" onClick={() => addCartProduct(record.product_id!)} />
+            <Badge status="success" />
           </div>
         )
       },
     },
   ]
+  //添加购物车
+  const addCartProduct = (product_id: string, quantity: number = 1) => {
+    cartApi.add_to_cart({ product_id, quantity }).then(r => {
+      if (r.state) {
+        message.success(r.msg)
+      } else {
+        message.error(r.msg)
+      }
+    })
+  }
+  //增加编辑商品
   const addOrUpdataProduct = (values: IaddProduct) => {
-    values.imageUrl =
-      'https://tse2-mm.cn.bing.net/th/id/OIP-C.QCdBYCyLGrWmhnwhhdmCPgHaEo?w=270&h=180&c=7&r=0&o=5&dpr=2&pid=1.7'
+    values.imageUrl = values.imageUrl.response.headimgurl
     if (edit) {
       let updataProduct = Object.assign(values, { product_id: edit?.product_id })
       api.update_product(updataProduct)
@@ -78,17 +100,55 @@ const ProductList: FC = () => {
     setOpen(false)
     getProduct()
   }
+  //删除产品
   const delProduct = (id?: string) => {
     if (id) {
       setProduct(prev => prev?.filter(r => r.product_id !== id))
-      api.del_product(id)
-      getProduct()
+      api.del_product(id).then(r => {
+        if (r.state) {
+          message.success('删除成功')
+          getProduct()
+        } else {
+          message.error(r.msg)
+        }
+      })
     }
   }
+  const delProducts = () => {
+    // 打开删除提示
+    Modal.confirm({
+      title: '提示',
+      content: '确认删除这些商品吗?',
+      okText: '确认',
+      cancelText: '取消',
+      async onOk() {
+        if (delProductID.length === 0) {
+          message.info('你没有选择数据')
+        } else
+          Promise.all(
+            delProductID.map(r => {
+              return api.del_product(r.product_id!)
+            })
+          )
+            .then(r => {
+              message.success('删除成功')
+              getProduct()
+            })
+            .catch(r => {
+              console.log(r)
+            })
+      },
+      onCancel() {
+        message.info('取消删除')
+      },
+    })
+  }
+  //发起编辑产品
   const editProduct = (currentProduct: Partial<Icontent>) => {
     setEdit(currentProduct)
     setOpen(true)
   }
+  //获取商品
   const getProduct = () =>
     api.getProduct().then(r => {
       let data = [] as Partial<Icontent>[]
@@ -99,11 +159,13 @@ const ProductList: FC = () => {
       })
       setProduct(data)
     })
+  //初始化
   useEffect(() => {
     getProduct()
   }, [])
   return (
-    <div>
+    <div style={{ position: 'relative' }}>
+      {/* 增加商品 */}
       <AddAction
         one={{
           title: '增加商品',
@@ -112,8 +174,9 @@ const ProductList: FC = () => {
             setOpen(true)
           },
         }}
-        two={{ title: '批量删除', click: delProduct }}
+        two={{ title: '批量删除', click: delProducts }}
       />
+      {/* 唤起表单 */}
       <CollectionCreateForm
         open={open}
         onCancel={() => setOpen(false)}
@@ -121,7 +184,25 @@ const ProductList: FC = () => {
         title={edit ? '编辑商品' : '增加商品'}
         edit={edit}
       />
-      <Divider />
+      <Cart CartOpen={CartOpen} CartClose={() => setCartOpen(false)} />
+      {/* 数据展示 */}
+      <Button
+        type="primary"
+        onClick={() => {
+          setCartOpen(true)
+        }}
+        style={{
+          position: 'absolute',
+          right: '40px',
+          borderRadius: '10px',
+          zIndex: '10',
+          top: '12px',
+        }}
+      >
+        <MyIcon type="icon-gouwuche" style={{ color: 'red' }} />
+        查看购物车
+      </Button>
+
       <Table
         rowSelection={{
           ...rowSelection,

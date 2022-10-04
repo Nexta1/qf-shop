@@ -6,9 +6,9 @@ import BreadCrumb from './breadCrumb'
 const UserContent: FC<{}> = () => {
   return (
     <UserLayout>
+      <BreadCrumb />
       <Content className="content" style={{ overflow: 'scroll' }}>
         <Suspense fallback="loading">
-          <BreadCrumb />
           <Outlet />
         </Suspense>
       </Content>

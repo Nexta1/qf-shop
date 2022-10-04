@@ -1,40 +1,32 @@
-import { Upload } from 'antd'
-import type { RcFile, UploadFile, UploadProps } from 'antd/es/upload/interface'
+import { message, Upload } from 'antd'
+import type { UploadFile, UploadProps } from 'antd/es/upload/interface'
 import React, { useEffect, useState } from 'react'
 type Iprops = {
-  url?: string
+  value?: string
+  onChange?: (value: string) => void
 }
-const App: React.FC<Iprops> = ({ url }) => {
+const App: React.FC<Iprops> = ({ value, onChange }) => {
   const [fileList, setFileList] = useState<UploadFile[]>([])
   useEffect(() => {
-    if (url) setFileList([{ uid: '-1', name: 'image.png', url }])
-  }, [url])
-  const onChange: UploadProps['onChange'] = ({ fileList: newFileList, event, file }) => {
-    console.log(event)
-    setFileList(newFileList)
-  }
-  const onPreview = async (file: UploadFile) => {
-    let src = file.url as string
-    if (!src) {
-      src = await new Promise(resolve => {
-        const reader = new FileReader()
-        reader.readAsDataURL(file.originFileObj as RcFile)
-        reader.onload = () => resolve(reader.result as string)
-      })
+    if (value) setFileList([{ uid: '-1', name: 'image.png', url: value }])
+  }, [value])
+  const onChangeUrl: UploadProps['onChange'] = ({ fileList }) => {
+    console.log(fileList)
+    if (fileList[0]?.status === 'done' && fileList[0].response.state === true) {
+      message.success('文件传成功')
+      //传递值
+      onChange?.(fileList[0].response.headimgurl)
     }
-    const image = new Image()
-    image.src = src
-    const imgWindow = window.open(src)
-    imgWindow?.document.write(image.outerHTML)
+    setFileList(fileList)
   }
 
   return (
     <Upload
-      action="/api/upload/uploadImg"
+      action="/api/students/uploadStuAvatar"
+      name="headimgurl"
       listType="picture-card"
       fileList={fileList}
-      onChange={onChange}
-      onPreview={onPreview}
+      onChange={onChangeUrl}
     >
       {fileList.length < 1 && '+ Upload'}
     </Upload>

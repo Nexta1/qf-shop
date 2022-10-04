@@ -1,7 +1,8 @@
 import React, { ReactNode } from 'react'
 import { RouteObject } from 'react-router-dom'
 import { BlockOutlined, ThunderboltOutlined, ShopOutlined, TagOutlined } from '@ant-design/icons'
-let Login = React.lazy(() => import('@/pages/Login'))
+import Login from '@/pages/Login'
+
 let Page404 = React.lazy(() => import('@/pages/404'))
 let PayManagerment = React.lazy(() => import('@/pages/PayManagerment'))
 let PayType = React.lazy(() => import('@/pages/PayManagerment/PayType'))
@@ -25,7 +26,7 @@ export interface Iroutes extends RouteObject {
 const routes: Iroutes[] = [
   {
     path: '/login',
-    element: <Login></Login>,
+    element: <Login />,
   },
   {
     path: '/',

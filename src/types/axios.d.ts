@@ -1,7 +1,7 @@
 type Member = {
-  state: boolean
-  msg: string
-  status: number
+  state?: boolean
+  msg?: string
+  status?: number
   code?: string
 }
 type ResponseResult<T> = {

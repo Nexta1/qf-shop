@@ -1,4 +1,7 @@
 import { http } from '@/utils/axios'
+interface IgetCart {
+  data: IcartProduct[]
+}
 export let check = (product_id: string) =>
   http.request<{}>({
     url: '/cart/check',
@@ -6,15 +9,14 @@ export let check = (product_id: string) =>
     data: { product_id },
   })
 
-export let get_cart = (product_id: string) =>
-  http.request<{}>({
+export let get_cart = () =>
+  http.request<IgetCart>({
     url: '/cart/get_cart',
-    params: { product_id },
   })
-export let del_prouct = (product_id: string) =>
+export let del_prouct = (card_id: string) =>
   http.request<{}>({
-    url: '/cart/del_prouct',
-    params: { product_id },
+    url: '/cart/del_cart',
+    params: { card_id },
   })
 export let update_cart = <T>(data: T) =>
   http.request<{}>({

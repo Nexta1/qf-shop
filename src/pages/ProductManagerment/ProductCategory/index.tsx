@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import * as api from '@/Api/Category'
-import { Button, DatePicker, Input, Image, Popconfirm } from 'antd'
+import { Button, DatePicker, Input, Image, Popconfirm, message } from 'antd'
 import scss from './catagoty.module.scss'
 import { SearchOutlined } from '@ant-design/icons'
 import AddAction from '@/components/addAction'
@@ -11,7 +11,7 @@ import { MyIcon } from '../ProductList'
 
 export type IaddCategory = {
   categoryName: string
-  categoryImgurl?: string
+  categoryImgurl?: any
 }
 type IupdateCategory = {
   category_id: string
@@ -28,15 +28,24 @@ const Category = () => {
   const [category, setCategory] = useState<Icategory[]>()
   const [open, setOpen] = useState(false)
   const [edit, setEdit] = useState<Icategory>()
-
   const addorUpdateProduct = (values: IaddCategory) => {
     if (edit) {
-      let updateCategory = Object.assign(values, { category_id: edit?.category_id })
-      api.updateCategory<IupdateCategory>(updateCategory)
+      let updateCategory = Object.assign({ category_id: edit?.category_id }, values)
+      console.log(updateCategory)
+      api.updateCategory<IupdateCategory>(updateCategory).then(r => {
+        if (r.state) {
+          message.success('编辑成功')
+          getCategory()
+        }
+      })
     } else {
-      api.addCategory<IaddCategory>(values)
+      api.addCategory<IaddCategory>(values).then(r => {
+        if (r.state) {
+          message.success('增加成功')
+          getCategory()
+        }
+      })
     }
-    getCategory()
     setOpen(false)
   }
   const getCategory = () =>
@@ -48,6 +57,7 @@ const Category = () => {
       setCategory(r.data)
     })
   const editProduct = (record: Icategory) => {
+    console.log(record)
     setEdit(record)
     setOpen(true)
   }

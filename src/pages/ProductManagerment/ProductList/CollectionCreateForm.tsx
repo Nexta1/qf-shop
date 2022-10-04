@@ -1,7 +1,7 @@
-import { Form, Input, Modal } from 'antd'
+import { Form, Input, message, Modal, Upload } from 'antd'
 import React, { useEffect } from 'react'
 import { Icontent } from '.'
-import UploadImg from '@/components/upload'
+
 export type IForm = {
   open: boolean
   onCreate: (values: IaddProduct, id?: string) => void
@@ -20,6 +20,13 @@ const CollectionCreateForm = ({ open, onCancel, onCreate, title, edit }: IForm) 
       form.resetFields()
     }
   }, [data, form])
+  const getUrl = (e: any) => {
+    console.log(e)
+    if (e.file.status === 'done' && e.file.response.state === true) {
+      message.success('文件传成功')
+    }
+    return e?.file
+  }
   return (
     <Modal
       forceRender
@@ -41,8 +48,10 @@ const CollectionCreateForm = ({ open, onCancel, onCreate, title, edit }: IForm) 
       }}
     >
       <Form layout="vertical" name="form_in_modal" form={form}>
-        <Form.Item name="imageUrl" label="商品图片">
-          <UploadImg url={edit?.imageUrl} />
+        <Form.Item name="imageUrl" label="商品图片" valuePropName="file" getValueFromEvent={getUrl}>
+          <Upload action="/api/students/uploadStuAvatar" name="headimgurl" listType="picture-card">
+            upload
+          </Upload>
         </Form.Item>
         <Form.Item name="category_id" label="类目ID" rules={[{ required: true }]}>
           <Input type="text" />
