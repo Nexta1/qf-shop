@@ -34,7 +34,6 @@ const CollectionCreateForm = ({ open, onCancel, onCreate, title, edit }: IForm) 
         form
           .validateFields()
           .then(values => {
-            console.log(values)
             form.resetFields()
             onCreate(values)
           })

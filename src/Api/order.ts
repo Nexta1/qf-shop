@@ -4,7 +4,7 @@ type IgetOrder = {
 }
 export let pre_order = <T>(data: T) =>
   http.request<{}>({
-    url: '/pay/pre_order',
+    url: '/order/pre_order',
     method: 'post',
     data,
   })

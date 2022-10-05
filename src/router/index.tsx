@@ -2,6 +2,7 @@ import React, { ReactNode } from 'react'
 import { RouteObject } from 'react-router-dom'
 import { BlockOutlined, ThunderboltOutlined, ShopOutlined, TagOutlined } from '@ant-design/icons'
 import Login from '@/pages/Login'
+import PreOrder from '@/pages/TransactionManagerment/PreOrder'
 
 let Page404 = React.lazy(() => import('@/pages/404'))
 let PayManagerment = React.lazy(() => import('@/pages/PayManagerment'))
@@ -22,6 +23,7 @@ export interface Iroutes extends RouteObject {
   key?: string
   icon?: ReactNode
   children?: Iroutes[]
+  menu?: number
 }
 const routes: Iroutes[] = [
   {
@@ -75,6 +77,13 @@ const routes: Iroutes[] = [
         icon: <TagOutlined />,
         key: 'transaction',
         children: [
+          {
+            path: 'preorder',
+            element: <PreOrder />,
+            label: '预支付',
+            key: 'preorder',
+            menu: 1,
+          },
           {
             path: 'amount',
             element: <Amount />,

@@ -7,9 +7,9 @@ import CollectionCreateForm from './CollectionCreateForm'
 import { createFromIconfontCN } from '@ant-design/icons'
 import Cart from './Cart'
 import * as cartApi from '@/Api/cart'
-
+import { useNavigate } from 'react-router-dom'
 export const MyIcon = createFromIconfontCN({
-  scriptUrl: '//at.alicdn.com/t/c/font_3684025_mq5c6td093g.js', // 在 iconfont.cn 上生成
+  scriptUrl: '//at.alicdn.com/t/c/font_3684025_kskst3ss3c.js', // 在 iconfont.cn 上生成
 })
 
 export type Icontent = Iproduct & {
@@ -22,7 +22,22 @@ const ProductList: FC = () => {
   const [edit, setEdit] = useState<Partial<Icontent>>()
   const [CartOpen, setCartOpen] = useState(false)
   const [delProductID, setDelProductID] = useState<Partial<Icontent>[]>([])
-
+  const navigate = useNavigate()
+  //购买商品
+  const purchaseProduct = (id: string) => {
+    Modal.confirm({
+      title: '提示',
+      content: '确定购买该产品吗',
+      okText: '确认',
+      cancelText: '取消',
+      onOk() {
+        navigate('/transaction/preorder', { state: { product_id: id } })
+      },
+      onCancel() {
+        message.info('取消购买')
+      },
+    })
+  }
   //选中数据
   const rowSelection = {
     onChange: (_: any, selectedRows: Partial<Icontent>[]) => {
@@ -72,7 +87,8 @@ const ProductList: FC = () => {
             </Popconfirm>
 
             <MyIcon type="icon-gouwuche2" onClick={() => addCartProduct(record.product_id!)} />
-            <Badge status="success" />
+            <MyIcon type="icon-goumai" onClick={() => purchaseProduct(record.product_id!)} />
+            <Badge status="processing" />
           </div>
         )
       },
@@ -90,15 +106,23 @@ const ProductList: FC = () => {
   }
   //增加编辑商品
   const addOrUpdataProduct = (values: IaddProduct) => {
-    values.imageUrl = values.imageUrl.response.headimgurl
     if (edit) {
       let updataProduct = Object.assign(values, { product_id: edit?.product_id })
-      api.update_product(updataProduct)
+      api.update_product(updataProduct).then(r => {
+        if (r.state) {
+          message.success(r.msg)
+          getProduct()
+        }
+      })
     } else {
-      api.add_product<IaddProduct>(values)
+      api.add_product<IaddProduct>(values).then(r => {
+        if (r.state) {
+          message.success(r.msg)
+          getProduct()
+        }
+      })
     }
     setOpen(false)
-    getProduct()
   }
   //删除产品
   const delProduct = (id?: string) => {

@@ -7,6 +7,7 @@ type IaddProduct = {
   imageUrl: any
 }
 interface Iproduct {
+  [k: string]: any
   category_id: string
   description: string
   imageUrl: string

@@ -3,9 +3,9 @@ type Iorder = {
   address: string
   create_time: string
   order_id: string
-  order_status: number
-  pay_status: number
-  shiping_status: number
+  order_status: number | string
+  pay_status: number | string
+  shiping_status: number | JSX.Element
   total_fee: number
   unid: string
   user_nickname: string

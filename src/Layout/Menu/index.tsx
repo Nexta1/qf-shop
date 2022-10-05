@@ -18,7 +18,7 @@ const MenuLists = (data: Iroutes[]) => {
     if (item.children && item.children.length > 0) {
       obj.children = MenuLists(item.children)
     }
-    MenuList.push(obj)
+    if (item.menu !== 1) MenuList.push(obj)
   })
   return MenuList
 }

@@ -31,7 +31,6 @@ const Category = () => {
   const addorUpdateProduct = (values: IaddCategory) => {
     if (edit) {
       let updateCategory = Object.assign({ category_id: edit?.category_id }, values)
-      console.log(updateCategory)
       api.updateCategory<IupdateCategory>(updateCategory).then(r => {
         if (r.state) {
           message.success('编辑成功')
