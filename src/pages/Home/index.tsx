@@ -1,12 +1,29 @@
-import Input from 'antd/lib/input/Input'
-import { FC } from 'react'
+import { Carousel } from 'antd'
+import React from 'react'
 
-const Home: FC = () => {
-  return (
-    <>
-      <h1>Home</h1>
-      <Input />
-    </>
-  )
+const contentStyle: React.CSSProperties = {
+  height: '160px',
+  color: '#fff',
+  lineHeight: '160px',
+  textAlign: 'center',
+  background: '#364d79',
 }
-export default Home
+
+const App: React.FC = () => (
+  <Carousel autoplay>
+    <div>
+      <h3 style={contentStyle}>1</h3>
+    </div>
+    <div>
+      <h3 style={contentStyle}>2</h3>
+    </div>
+    <div>
+      <h3 style={contentStyle}>3</h3>
+    </div>
+    <div>
+      <h3 style={contentStyle}>4</h3>
+    </div>
+  </Carousel>
+)
+
+export default App

@@ -17,8 +17,9 @@ const BreadCrumb = () => {
   const location = useLocation()
     .pathname.split('/')
     .filter(r => r)
+  location.shift()
   const RouteFlat = GetRoutes(routes)
-  const extraBreadcrumbItems = location.map(i => {
+  const extraBreadcrumbItems = location?.map(i => {
     let route = RouteFlat?.find(r => r.key === i)
     return (
       <Breadcrumb.Item key={i}>
@@ -31,7 +32,7 @@ const BreadCrumb = () => {
     <Breadcrumb.Item key="home">
       <Link to="/">首页</Link>
     </Breadcrumb.Item>,
-  ].concat(extraBreadcrumbItems)
+  ].concat(extraBreadcrumbItems!)
 
   return <Breadcrumb style={{ margin: '10px' }}>{breadcrumbItems}</Breadcrumb>
 }

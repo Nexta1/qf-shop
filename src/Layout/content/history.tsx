@@ -19,12 +19,13 @@ const History: FC = () => {
     .pathname.split('/')
     .filter(r => r)
     .pop()
+
   useEffect(() => {
     if (Session) setHistory(Session)
   }, [Session])
   useEffect(() => {
     let route = GetRoutes(routes)?.find(v => v?.key === location)
-    if (route?.menu === 1) return
+    if (route?.menu === 1 || route?.path === '/login') return
     let obj = {
       label: route?.label!,
       path: route?.path!,
@@ -41,27 +42,32 @@ const History: FC = () => {
     })
   }, [location])
   setSession.set(history)
+
   return (
     <div>
-      {history!.map(r => {
-        return (
-          <Button
-            className={scss.button}
-            key={r.id}
-            onClick={() => navigate(r.path)}
-            style={{ background: r.id === location ? '#1890ff' : 'none', color: r.id === location ? 'white' : 'black' }}
-          >
-            {r.label}
-            <CloseCircleOutlined
-              style={{ zIndex: 100, fontSize: '16px' }}
-              onClick={e => {
-                e.stopPropagation()
-                setHistory(prev => prev.filter(v => v.id !== r.id))
+      {history.length > 0 &&
+        history!.map(r => {
+          return (
+            <Button
+              className={scss.button}
+              key={r.id}
+              onClick={() => navigate(r.path)}
+              style={{
+                background: r.id === location ? '#1890ff' : 'none',
+                color: r.id === location ? 'white' : 'black',
               }}
-            />
-          </Button>
-        )
-      })}
+            >
+              {r.label}
+              <CloseCircleOutlined
+                style={{ zIndex: 100, fontSize: '16px' }}
+                onClick={e => {
+                  e.stopPropagation()
+                  setHistory(prev => prev.filter(v => v.id !== r.id))
+                }}
+              />
+            </Button>
+          )
+        })}
     </div>
   )
 }

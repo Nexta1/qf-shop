@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react'
 import * as api from '@/Api/Category'
-import { Button, DatePicker, Input, Image, Popconfirm, message } from 'antd'
-import scss from './catagoty.module.scss'
-import { SearchOutlined } from '@ant-design/icons'
+import { Image, Popconfirm, message } from 'antd'
+
 import AddAction from '@/components/addAction'
 import { Table } from 'antd'
 import React from 'react'
 import ModelCategory from './modelCategory'
 import { MyIcon } from '../ProductList'
-
+import { PlusSquareOutlined, DeleteOutlined } from '@ant-design/icons'
+import Search from '@/components/Search'
 export type IaddCategory = {
   categoryName: string
   categoryImgurl?: any
@@ -76,24 +76,18 @@ const Category = () => {
         title={edit ? '编辑商品' : '添加商品'}
         edit={edit}
       />
-      <div>
-        产品名称： <Input placeholder="Basic usage" className={scss.searchInput} />
-        添加日期：
-        <DatePicker />
-        <Button style={{ marginLeft: '20px' }}>
-          <SearchOutlined /> 查询
-        </Button>
-      </div>
+      <Search />
       <div style={{ marginTop: '10px', marginBottom: '10px' }}>
         <AddAction
           one={{
+            icon: <PlusSquareOutlined />,
             title: '增加商品',
             click: () => {
               setOpen(true)
               setEdit(undefined)
             },
           }}
-          two={{ title: '删除商品' }}
+          two={{ title: '删除商品', icon: <DeleteOutlined /> }}
         />
       </div>
       <CategoryTable data={category!} operation={{ editProduct, delProduct }} />

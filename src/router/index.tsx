@@ -3,6 +3,7 @@ import { RouteObject } from 'react-router-dom'
 import { BlockOutlined, ThunderboltOutlined, ShopOutlined, TagOutlined } from '@ant-design/icons'
 import Login from '@/pages/Login'
 import PreOrder from '@/pages/TransactionManagerment/PreOrder'
+import Home from '@/pages/Home'
 
 let Page404 = React.lazy(() => import('@/pages/404'))
 let PayManagerment = React.lazy(() => import('@/pages/PayManagerment'))
@@ -34,6 +35,13 @@ const routes: Iroutes[] = [
     path: '/',
     element: <ContentBase />,
     children: [
+      {
+        path: '',
+        element: <Home />,
+        key: 'home',
+        label: 'Home',
+        menu: 1,
+      },
       {
         path: 'product',
         element: <ProductManagerment />,

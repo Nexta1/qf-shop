@@ -8,6 +8,8 @@ import { createFromIconfontCN } from '@ant-design/icons'
 import Cart from './Cart'
 import * as cartApi from '@/Api/cart'
 import { useNavigate } from 'react-router-dom'
+import { PlusSquareOutlined, DeleteOutlined } from '@ant-design/icons'
+
 export const MyIcon = createFromIconfontCN({
   scriptUrl: '//at.alicdn.com/t/c/font_3684025_kskst3ss3c.js', // 在 iconfont.cn 上生成
 })
@@ -193,12 +195,13 @@ const ProductList: FC = () => {
       <AddAction
         one={{
           title: '增加商品',
+          icon: <PlusSquareOutlined />,
           click: () => {
             setEdit(undefined)
             setOpen(true)
           },
         }}
-        two={{ title: '批量删除', click: delProducts }}
+        two={{ title: '批量删除', icon: <DeleteOutlined />, click: delProducts }}
       />
       {/* 唤起表单 */}
       <CollectionCreateForm
