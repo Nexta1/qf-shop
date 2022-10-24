@@ -51,7 +51,7 @@ const UserHeader: FC<Iprops> = props => {
             })}
           </Col>
           <Col span={16} style={{ color: 'white', textAlign: 'center', fontSize: '20px' }}>
-            China-Shop
+            『S』『H』『O』『P』
           </Col>
           <Col span={6}>
             <Popover placement="bottomLeft" trigger="hover" content={Content}>

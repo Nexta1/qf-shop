@@ -1,6 +1,8 @@
 import { useLocation } from 'react-router-dom'
 import { useMemo } from 'react'
 type Imethods<T> = [T, { set: (data: any) => void; remove: () => void }]
+
+
 const useStorage = <T>(key: any): Imethods<T> => {
   const location = useLocation()
   //设置

@@ -32,7 +32,7 @@ const UserMenu: FC<Iprops> = props => {
   const { collapsed } = props
   const target = routes.find(item => item.path === '/')
   const navigate = useNavigate()
-
+  
   //菜单
   const Lists = MenuLists(target?.children!)
   //路由跳转

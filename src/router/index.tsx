@@ -4,7 +4,7 @@ import { BlockOutlined, ThunderboltOutlined, ShopOutlined, TagOutlined } from '@
 import Login from '@/pages/Login'
 import PreOrder from '@/pages/TransactionManagerment/PreOrder'
 import Home from '@/pages/Home'
-
+import g from './gener'
 let Page404 = React.lazy(() => import('@/pages/404'))
 let PayManagerment = React.lazy(() => import('@/pages/PayManagerment'))
 let PayType = React.lazy(() => import('@/pages/PayManagerment/PayType'))
@@ -18,7 +18,13 @@ let Amount = React.lazy(() => import('@/pages/TransactionManagerment/Amount'))
 let Order = React.lazy(() => import('@/pages/TransactionManagerment/Order'))
 let Refund = React.lazy(() => import('@/pages/TransactionManagerment/Refund'))
 let ContentBase = React.lazy(() => import('@/Layout/content'))
-
+g.keys().forEach((r: any) => {
+  console.log(r)
+  let currentComponent = g(r).default
+  let a = Object.entries(currentComponent)
+  console.log(a)
+  console.log(currentComponent)
+})
 export interface Iroutes extends RouteObject {
   label?: string
   key?: string
