@@ -2,7 +2,6 @@ import { useLocation } from 'react-router-dom'
 import { useMemo } from 'react'
 type Imethods<T> = [T, { set: (data: any) => void; remove: () => void }]
 
-
 const useStorage = <T>(key: any): Imethods<T> => {
   const location = useLocation()
   //设置
@@ -21,6 +20,7 @@ const useStorage = <T>(key: any): Imethods<T> => {
   }, [key, location])
   //移除
   const remove = (): void => {
+    console.log(1)
     localStorage.removeItem(key)
   }
   return [get, { set, remove }]
