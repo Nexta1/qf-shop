@@ -14,6 +14,7 @@ const useRouteWithGuard: FC<Iprops> = props => {
   let [token] = useStorage(props.token)
 
   useEffect(() => {
+    console.log(1)
     if (!token) {
       if (loaction.pathname !== '/login') navigate('/login')
     }
