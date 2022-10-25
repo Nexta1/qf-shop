@@ -11,6 +11,7 @@ const useStorage = <T>(key: any): Imethods<T> => {
   //获取token
   const get = useMemo<T>(() => {
     const cacheStore = localStorage.getItem(key)
+    console.log(123)
     if (location)
       if (cacheStore) {
         return JSON.parse(cacheStore)
